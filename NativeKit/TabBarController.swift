@@ -20,6 +20,7 @@ class TabBarController: UITabBarController {
         let tabBarLists = [listVC, optionsVC]
         self.viewControllers = tabBarLists
         self.delegate = self
+        self.view.backgroundColor = .white
     }
 
 }
