@@ -7,4 +7,5 @@ target 'NativeKit' do
 
   # Pods for NativeKit
   pod 'SnapKit', '~> 5.0.0'
+  pod 'NVActivityIndicatorView'
 end

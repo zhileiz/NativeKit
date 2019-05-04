@@ -23,7 +23,7 @@ class ListViewController: UIViewController {
         var collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         if let flowLayout = collection.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
-//            flowLayout.sectionInset = UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0)
+            flowLayout.sectionInset = UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0)
         }
         collection.bounces = true
         collection.backgroundColor = .black
@@ -47,19 +47,10 @@ class ListViewController: UIViewController {
         Course(code: "CIS-380", title: "Computer Operating Systems ")
     ]
     
-    let scripts = [
-        "https://penncoursereview.com/",
-        "https://pennlabs.org/",
-        "https://penncoursealert.com/",
-        "https://penncoursereview.com/",
-        "https://pennlabs.org/",
-        "https://penncoursealert.com/",
-        "https://penncoursereview.com/",
-        "https://pennlabs.org/",
-        "https://penncoursealert.com/",
-        "https://penncoursereview.com/",
-        "https://pennlabs.org/",
-        "https://penncoursealert.com/"
+    let scripts:[Script] = [
+        Script(title: "Penn Course Review", url: "https://penncoursereview.com/", content: "", image: "pcr"),
+        Script(title: "Penn Course Alert", url: "https://penncoursealert.com/", content: "", image: "pca"),
+        Script(title: "Bilibili Videos", url: "https://www.bilibili.com/", content: "", image: "bilibili")
     ]
     
     override func viewDidLoad() {
@@ -151,22 +142,26 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "script", for: indexPath)
+        let script = scripts[indexPath.row]
         cell.layer.cornerRadius = cell.frame.width / 2
         cell.layer.masksToBounds = true
         if (cell.contentView.subviews.count < 1) {
             let imageView = UIImageView.init(frame: cell.frame)
-            imageView.image = UIImage(named: "tinder")
+            imageView.image = script.image
             cell.contentView.addSubview(imageView)
             imageView.snp.makeConstraints { (view) in
                 view.centerX.centerY.equalToSuperview()
                 view.width.height.equalToSuperview()
             }
         }
+        cell.backgroundColor = .white
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let script = scripts[indexPath.row]
         let viewController = WebViewController()
+        viewController.script = script
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

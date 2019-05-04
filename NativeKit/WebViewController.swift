@@ -8,28 +8,95 @@
 
 import UIKit
 import WebKit
+import SnapKit
+import NVActivityIndicatorView
 
 class WebViewController: UIViewController {
     
-
-    var webView: WKWebView!
+    var script:Script?
     
-    override func loadView() {
+    var loaded = false
+    
+    let webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
-    }
+        let view = WKWebView(frame: .zero, configuration: webConfiguration)
+        return view
+    }()
+    
+    let coverView: UIView = {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    let indicator = NVActivityIndicatorView(frame: .zero, type: .pacman, color: .red, padding: 20)
+    
+//    override func loadView() {
+//        let webConfiguration = WKWebViewConfiguration()
+//        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+//        webView.uiDelegate = self
+//        webView.navigationDelegate = self
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let myURL = URL(string:"https://www.apple.com")
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        view.addSubview(webView)
+        view.addSubview(coverView)
+        coverView.addSubview(indicator)
+        view.backgroundColor = .white
+        if let url = script?.url {
+            let myURL = URL(string: url)
+            let myRequest = URLRequest(url: myURL!)
+            webView.load(myRequest)
+        }
+        webView.snp.makeConstraints { (view) in
+            view.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            view.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            view.left.equalToSuperview()
+            view.right.equalToSuperview()
+        }
+        coverView.snp.makeConstraints { (view) in
+            view.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            view.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            view.left.equalToSuperview()
+            view.right.equalToSuperview()
+        }
+        indicator.snp.makeConstraints { (view) in
+            view.centerX.centerY.equalToSuperview()
+        }
+        indicator.startAnimating()
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.topItem?.title = script?.title
     }
 }
 
 extension WebViewController: WKUIDelegate {
     
+}
+
+extension WebViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("🕙 finished")
+        indicator.stopAnimating()
+        coverView.removeFromSuperview()
+        self.view.layoutIfNeeded()
+        loaded = true
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("🔗\(webView.url)")
+        if (loaded) {
+            print("sshould go back")
+            let nextScript = Script.init(title: script!.title, url: webView.url?.absoluteString ?? "www.apple.com", content: script!.content, image: "nil")
+            let viewController = WebViewController()
+            viewController.script = nextScript
+            self.navigationController?.pushViewController(viewController, animated: false)
+            webView.stopLoading()
+        }
+    }
 }
