@@ -164,4 +164,9 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewController = WebViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
 }

@@ -15,6 +15,7 @@
 		CFB2E3C3227D2C0500958793 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB2E3C2227D2C0500958793 /* ListViewController.swift */; };
 		CFB2E3C5227D2C1900958793 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB2E3C4227D2C1900958793 /* OptionsViewController.swift */; };
 		CFB2E3C7227D378700958793 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB2E3C6227D378700958793 /* Course.swift */; };
+		CFB2E3CD227D5E8700958793 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB2E3CC227D5E8700958793 /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		CFB2E3C2227D2C0500958793 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CFB2E3C4227D2C1900958793 /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		CFB2E3C6227D378700958793 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		CFB2E3CC227D5E8700958793 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				CFB2E3C2227D2C0500958793 /* ListViewController.swift */,
 				CFB2E3C4227D2C1900958793 /* OptionsViewController.swift */,
 				CFB2E3C6227D378700958793 /* Course.swift */,
+				CFB2E3CC227D5E8700958793 /* WebViewController.swift */,
 			);
 			path = NativeKit;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFB2E3C1227D2A2200958793 /* TabBarController.swift in Sources */,
+				CFB2E3CD227D5E8700958793 /* WebViewController.swift in Sources */,
 				CFB2E3C3227D2C0500958793 /* ListViewController.swift in Sources */,
 				CFB2E3C7227D378700958793 /* Course.swift in Sources */,
 				CFB2E3AF227D28CA00958793 /* AppDelegate.swift in Sources */,
