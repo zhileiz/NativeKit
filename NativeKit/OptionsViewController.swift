@@ -42,7 +42,7 @@ class OptionsViewController: UIViewController {
     var dataArray = ["One", "Two", "Three", "Four", "Five"]
     
     let scripts:[Script] = [
-        Script(title: "Penn Course Review", url: "https://penncoursereview.com/", content: "", image: "pcr"),
+        Script(title: "ZZact Demo", url: "http://localhost:8081/", content: "", image: "pcr"),
         Script(title: "Penn Course Alert", url: "https://penncoursealert.com/", content: "", image: "pca"),
         Script(title: "Bilibili Videos", url: "https://www.bilibili.com/", content: "", image: "bilibili")
     ]
@@ -168,7 +168,7 @@ extension OptionsViewController : UICollectionViewDelegate, UICollectionViewData
         let script = scripts[indexPath.row]
         let viewController = WebViewController()
         viewController.script = script
-        self.present(viewController, animated: true, completion: nil)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

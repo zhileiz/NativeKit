@@ -17,11 +17,7 @@ class WebViewController: UIViewController {
     
     var loaded = false
     
-    let webView: WKWebView = {
-        let webConfiguration = WKWebViewConfiguration()
-        let view = WKWebView(frame: .zero, configuration: webConfiguration)
-        return view
-    }()
+    var webView: WKWebView?
     
     let coverView: UIView = {
         let view = UIView(frame: .zero)
@@ -38,23 +34,33 @@ class WebViewController: UIViewController {
 //        webView.navigationDelegate = self
 //    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(webView)
-        view.addSubview(coverView)
-        coverView.addSubview(indicator)
-        view.backgroundColor = .white
+    func setUpWebView() {
+        let jsController = WKUserContentController()
+        jsController.add(self as! WKScriptMessageHandler, name: "observe")
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.userContentController = jsController
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        view.addSubview(webView!)
         if let url = script?.url {
             let myURL = URL(string: url)
             let myRequest = URLRequest(url: myURL!)
-            webView.load(myRequest)
+            webView!.load(myRequest)
         }
-        webView.snp.makeConstraints { (view) in
+        webView!.snp.makeConstraints { (view) in
             view.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             view.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             view.left.equalToSuperview()
             view.right.equalToSuperview()
         }
+        webView!.uiDelegate = self
+        webView!.navigationDelegate = self
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(coverView)
+        coverView.addSubview(indicator)
+        view.backgroundColor = .white
         coverView.snp.makeConstraints { (view) in
             view.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             view.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
@@ -65,17 +71,26 @@ class WebViewController: UIViewController {
             view.centerX.centerY.equalToSuperview()
         }
         indicator.startAnimating()
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
+        setUpWebView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.topItem?.title = script?.title
+        navigationItem.title = script?.title
     }
 }
 
 extension WebViewController: WKUIDelegate {
     
+}
+
+extension WebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if ("\(message.body)" == "close") {
+            self.navigationController?.popViewController(animated: true)
+        }
+        navigationItem.title = "\(message.body)"
+        webView!.evaluateJavaScript("addTextNode(\"incremented Likes\")", completionHandler: nil)
+    }
 }
 
 extension WebViewController: WKNavigationDelegate {
@@ -89,7 +104,6 @@ extension WebViewController: WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("🔗\(webView.url)")
         if (loaded) {
             print("sshould go back")
             let nextScript = Script.init(title: script!.title, url: webView.url?.absoluteString ?? "www.apple.com", content: script!.content, image: "nil")

@@ -162,6 +162,6 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let script = scripts[indexPath.row]
         let viewController = WebViewController()
         viewController.script = script
-        self.navigationController?.pushViewController(viewController, animated: true)
+        self.present(viewController, animated: true, completion: nil)
     }
 }
