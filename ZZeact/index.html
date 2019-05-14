@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>ZZeact Tester</title>
+    </head>
+    <body>
+	<div id="root"></div>
+	<p id="p1">From App:</p>
+	<script>
+		function addTextNode(text) {
+		  var newtext = document.createTextNode(text),
+		  p1 = document.getElementById("p1");
+		  p1.appendChild(newtext);
+		}
+	</script>
+    </body>
+</html>
