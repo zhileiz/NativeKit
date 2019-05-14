@@ -20,4 +20,4 @@ An iOS Demo for WKWebView supported mini-programs
   * When like button of the JS app is hit, it triggers the native app to send a message to the JS app and change the document content.
 
 ## Screenshot
-![Demo](https://github.com/zhileiz/NativeKit/blob/master/demo.gif)
+![Demo](https://github.com/zhileiz/NativeKit/blob/master/demo.gif =400x)
