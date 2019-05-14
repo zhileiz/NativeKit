@@ -96,7 +96,6 @@ extension WebViewController: WKScriptMessageHandler {
 extension WebViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("🕙 finished")
         indicator.stopAnimating()
         coverView.removeFromSuperview()
         self.view.layoutIfNeeded()

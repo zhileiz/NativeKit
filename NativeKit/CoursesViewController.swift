@@ -98,7 +98,6 @@ class CoursesViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         innerShadow.frame = topView.bounds
         // Shadow path (1pt ring around bounds)
-        print(innerShadow.frame)
         let path = UIBezierPath(rect: innerShadow.bounds.insetBy(dx: -3, dy: -3))
         let cutout = UIBezierPath(rect: innerShadow.bounds).reversing()
         path.append(cutout)
@@ -159,7 +158,7 @@ extension CoursesViewController : UITableViewDataSource {
 
 extension CoursesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        refreshControl.endRefreshing();
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
