@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class OptionsViewController: UIViewController {
+class CoursesViewController: UIViewController {
     
     // MARK: UIElements
     
@@ -39,7 +39,22 @@ class OptionsViewController: UIViewController {
     
     // MARK: DATA
     
-    var dataArray = ["One", "Two", "Three", "Four", "Five"]
+    let courses = [
+        Course(code: "CIS-99", title: "Undergraduate Research / Independent Study"),
+        Course(code: "CIS-105", title: "Computational Data Exploration"),
+        Course(code: "CIS-110", title: "Introduction to Computer Programming"),
+        Course(code: "CIS-120", title: "Programming Languages and Techniques I "),
+        Course(code: "CIS-121", title: "Programming Languages and Techniques II "),
+        Course(code: "CIS 160", title: "Mathematical Foundations of Computer Science"),
+        Course(code: "CIS-240", title: "Introduction to Computer Architecture"),
+        Course(code: "CIS-262", title: "Automata, Computability, and Complexity "),
+        Course(code: "CIS-320", title: "Introduction to Algorithms"),
+        Course(code: "CIS-331", title: "Intro to Networks and Security"),
+        Course(code: "CIS-341", title: "Compilers and Interpreters"),
+        Course(code: "CIS-350", title: "Software Design/Engineering "),
+        Course(code: "CIS 371", title: "Computer Organization and Design "),
+        Course(code: "CIS-380", title: "Computer Operating Systems ")
+    ]
     
     let scripts:[Script] = [
         Script(title: "ZZact Demo", url: "http://localhost:8081/", content: "", image: "pcr"),
@@ -96,6 +111,7 @@ class OptionsViewController: UIViewController {
         innerShadow.shadowRadius = 3
         // Add
         topView.layer.addSublayer(innerShadow)
+        self.title = "Course"
     }
     
     override func viewDidLoad() {
@@ -103,6 +119,11 @@ class OptionsViewController: UIViewController {
         setUpTableView()
         setUpTopView()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+         self.navigationController?.navigationBar.topItem?.title = "Courses"
+    }
+    
     
     
     // MARK: Properties Used by Scroll View Delegate
@@ -114,33 +135,35 @@ class OptionsViewController: UIViewController {
     
 }
 
-extension OptionsViewController : UITableViewDataSource {
+extension CoursesViewController : UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataArray.count
+        return courses.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "idCell", for: indexPath as IndexPath)
-        cell.textLabel!.text = dataArray[indexPath.row]
+        let cell = UITableViewCell(style:.subtitle, reuseIdentifier: "idCell")
+        cell.detailTextLabel?.text = courses[indexPath.row].code
+        cell.textLabel?.text = courses[indexPath.row].title
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60.0
     }
 }
 
-extension OptionsViewController : UITableViewDelegate {
+extension CoursesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        refreshControl.endRefreshing();
     }
 }
 
-extension OptionsViewController : UICollectionViewDelegate, UICollectionViewDataSource {
+extension CoursesViewController : UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return scripts.count
@@ -173,7 +196,7 @@ extension OptionsViewController : UICollectionViewDelegate, UICollectionViewData
 }
 
 
-extension OptionsViewController {
+extension CoursesViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (scrollView.contentOffset.y < -30) {
             let alpha = 2 * (scrollView.contentOffset.y + 30) / -60;

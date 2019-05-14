@@ -12,12 +12,9 @@ class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let listVC = ListViewController()
+        let listVC = CoursesViewController()
         listVC.tabBarItem = UITabBarItem(title: "Courses", image: UIBarButtonItem.SystemItem.bookmarks.image(), tag: 0)
-        listVC.tabBarItem.title = "Courses"
-        let optionsVC = OptionsViewController()
-        optionsVC.tabBarItem = UITabBarItem(title: "Options", image: UIBarButtonItem.SystemItem.action.image(), tag: 1)
-        let tabBarLists = [listVC, optionsVC]
+        let tabBarLists = [listVC]
         self.viewControllers = tabBarLists
         self.delegate = self
         self.view.backgroundColor = .white
