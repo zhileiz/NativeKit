@@ -25,27 +25,27 @@ class OptionsViewController: UIViewController {
         return view
     }()
     
-    let customView: UIView = {
-        let view = UIView(frame: CGRect.zero)
-        view.backgroundColor = UIColor(red:0.92, green:0.92, blue:0.92, alpha:1.0)
-        return view;
-    }()
-    
     let topView : UICollectionView = {
         var collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         if let flowLayout = collection.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
-            flowLayout.sectionInset = UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0)
+            flowLayout.sectionInset = UIEdgeInsets(top: 15, left: 10, bottom: 5, right: 0)
+            flowLayout.itemSize = CGSize(width: 50, height: 50)
         }
         collection.bounces = true
-        collection.backgroundColor = .black
+        collection.backgroundColor = UIColor(red:0.92, green:0.92, blue:0.92, alpha:1.0)
         return collection
     }()
-    
     
     // MARK: DATA
     
     var dataArray = ["One", "Two", "Three", "Four", "Five"]
+    
+    let scripts:[Script] = [
+        Script(title: "Penn Course Review", url: "https://penncoursereview.com/", content: "", image: "pcr"),
+        Script(title: "Penn Course Alert", url: "https://penncoursealert.com/", content: "", image: "pca"),
+        Script(title: "Bilibili Videos", url: "https://www.bilibili.com/", content: "", image: "bilibili")
+    ]
     
     
     // MARK: Set up Layout
@@ -56,6 +56,7 @@ class OptionsViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "idCell")
         tableView.addSubview(refreshControl)
+        tableView.sendSubviewToBack(refreshControl)
         tableView.snp.makeConstraints { (view) in
             view.left.equalToSuperview()
             view.right.equalToSuperview()
@@ -65,17 +66,22 @@ class OptionsViewController: UIViewController {
     }
     
     func setUpTopView() {
-        refreshControl.addSubview(customView)
-        customView.snp.makeConstraints { (view) in
+        refreshControl.addSubview(topView)
+        topView.snp.makeConstraints { (view) in
             view.left.right.equalTo(refreshControl)
             view.height.equalTo(80)
             view.centerY.equalTo(refreshControl)
         }
+        // collectionview
+        topView.delegate = self
+        topView.dataSource = self
+        topView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "script")
     }
     
     let innerShadow = CALayer()
+    
     override func viewDidAppear(_ animated: Bool) {
-        innerShadow.frame = customView.bounds
+        innerShadow.frame = topView.bounds
         // Shadow path (1pt ring around bounds)
         print(innerShadow.frame)
         let path = UIBezierPath(rect: innerShadow.bounds.insetBy(dx: -3, dy: -3))
@@ -89,7 +95,7 @@ class OptionsViewController: UIViewController {
         innerShadow.shadowOpacity = 1
         innerShadow.shadowRadius = 3
         // Add
-        customView.layer.addSublayer(innerShadow)
+        topView.layer.addSublayer(innerShadow)
     }
     
     override func viewDidLoad() {
@@ -134,13 +140,46 @@ extension OptionsViewController : UITableViewDelegate {
     }
 }
 
+extension OptionsViewController : UICollectionViewDelegate, UICollectionViewDataSource {
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return scripts.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "script", for: indexPath)
+        let script = scripts[indexPath.row]
+        cell.layer.cornerRadius = cell.frame.width / 2
+        cell.layer.masksToBounds = true
+        if (cell.contentView.subviews.count < 1) {
+            let imageView = UIImageView.init(frame: cell.frame)
+            imageView.image = script.image
+            cell.contentView.addSubview(imageView)
+            imageView.snp.makeConstraints { (view) in
+                view.centerX.centerY.equalToSuperview()
+                view.width.height.equalToSuperview()
+            }
+        }
+        cell.backgroundColor = .white
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let script = scripts[indexPath.row]
+        let viewController = WebViewController()
+        viewController.script = script
+        self.present(viewController, animated: true, completion: nil)
+    }
+}
+
 
 extension OptionsViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (scrollView.contentOffset.y < -30) {
             let alpha = 2 * (scrollView.contentOffset.y + 30) / -60;
-            customView.backgroundColor = UIColor(red:0.92, green:0.92, blue:0.92, alpha: alpha)
-            innerShadow.shadowColor = UIColor(red: 0.66, green: 0.66, blue: 0.66, alpha: alpha).cgColor
+//            topView.backgroundColor = UIColor(red: 0.92, green:0.92, blue:0.92, alpha: alpha)
+            topView.alpha = alpha
+//            innerShadow.shadowColor = UIColor(red: 0.66, green: 0.66, blue: 0.66, alpha: alpha).cgColor
         }
         if scrollView.contentOffset.y < -90 {
             if (isDragging) {
